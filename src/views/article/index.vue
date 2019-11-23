@@ -17,16 +17,17 @@
     </el-radio-group>
   </el-form-item>
   <el-form-item label="频道列表">
-    <el-select  placeholder="请选择频道" v-model="filterForm.channel_id">
-      <el-option label="所有频道" :value="null"></el-option>
+    <!-- <el-select  placeholder="请选择频道" v-model="filterForm.channel_id"> -->
+      <!-- <el-option label="所有频道" :value="null"></el-option>
       <el-option
       :label="channel.name"
       :value="channel.id"
       v-for="channel in channels"
       :key="channel.id"
-      >
-      </el-option>
-    </el-select>
+      > -->
+      <!-- </el-option> -->
+      <channel-select v-model="filterForm.channel_id"></channel-select>
+    <!-- </el-select> -->
   </el-form-item>
   <el-form-item label="时间选择">
    <el-date-picker
@@ -100,7 +101,7 @@
         >
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="onDelete(scope.row.id)">删除</el-button>
-          <el-button type="primary" size="mini">编辑</el-button>
+          <el-button type="primary" size="mini" @click="$router.push(`/publish/`+scope.row.id)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -120,8 +121,12 @@
 </template>
 
 <script>
+import channelSelect from '../../components/channelSelect/channel-select'
 export default {
   name: 'Article',
+  components: {
+    channelSelect
+  },
   data () {
     return {
       filterForm: {
@@ -157,7 +162,7 @@ export default {
       ],
       totalCount: 0, // 总记录数
       loading: true,
-      channels: [], // 频道列表
+      // channels: [], // 频道列表
       page: 1// 当前页码
 
     }
@@ -166,7 +171,7 @@ export default {
     // 初始化时应该默认加载第一页数据
     this.loadArticles(1)
     // 加载频道列表
-    this.loadChannels()
+    // this.loadChannels()
   },
   methods: {
     // page如果传递就是用传递的,如果没传，默认就是1
@@ -201,8 +206,8 @@ export default {
         this.articles = res.data.data.results
         // 更新总记录数
         this.totalCount = res.data.data.total_count
-      }).catch(err => {
-        console.log(err, '获取数据失败')
+      }).catch(() => {
+        // console.log(err, '获取数据失败')
       }).finally(() => {
         // 无论成功还是失败，最终都要执行
         this.loading = false
@@ -212,21 +217,21 @@ export default {
     onPageChange (page) {
       // 记录当前页码
       this.page = page
-      console.log(page)
+      // console.log(page)
       // 请求加载指定页码的文章列表
       this.loadArticles(page)
     },
-    loadChannels () {
-      this.$axios({
-        method: 'GET',
-        url: '/channels'
-      }).then(res => {
-        // console.log(res.data.data.channels)
-        this.channels = res.data.data.channels
-      }).catch(err => {
-        console.log(err, '获取数据失败')
-      })
-    },
+    // loadChannels () {
+    //   this.$axios({
+    //     method: 'GET',
+    //     url: '/channels'
+    //   }).then(res => {
+    //     // console.log(res.data.data.channels)
+    //     this.channels = res.data.data.channels
+    //   }).catch(err => {
+    //     console.log(err, '获取数据失败')
+    //   })
+    // },
     onDelete (articleId) {
       // console.log(articleId)
       this.$axios({
@@ -236,10 +241,10 @@ export default {
         //   Authorization: `Bearer ${window.localStorage.getItem('user-token')}`
         // }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.loadArticles(this.page)
-      }).catch(err => {
-        console.log(err, '删除失败')
+      }).catch(() => {
+        // console.log(err, '删除失败')
       })
     }
 

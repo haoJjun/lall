@@ -7,6 +7,7 @@ import '../src/index.less'
 import axios from 'axios'
 import 'nprogress/nprogress.css'
 import JSONbig from 'json-bigint'
+import moment from 'moment'
 axios.defaults.transformResponse = [function (data) {
   // 这里使用 JSONbig.parse 转换原始数据
   // 类似于 JSON.parse
@@ -21,7 +22,7 @@ axios.defaults.transformResponse = [function (data) {
 // Add a request interceptor axios请求拦截器
 axios.interceptors.request.use(function (config) {
   // Do something before request is sent
-  console.log('请求拦截器')
+  // console.log('请求拦截器')
   const token = window.localStorage.getItem('user-token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
@@ -36,7 +37,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
-  console.log('相应拦截器')
+  // console.log('相应拦截器')
 
   return response
 }, function (error) {
@@ -53,6 +54,9 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
+Vue.filter('dateFormat', (value, format = 'YYYY-MM-DD') => {
+  return moment(value).format(format)
+})
 new Vue({
   router,
   render: h => h(App)

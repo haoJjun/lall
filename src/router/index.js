@@ -7,6 +7,11 @@ import Home from '@/views/home'
 import Article from '../views/article'
 import Publish from '@/views/publish'
 import NProgress from 'nprogress'
+import Comment from '@/views/comment'
+import CommentList from '@/views/comment-list'
+import Media from '@/views/media'
+import Account from '@/views/account'
+import Echarts from '@/views/echarts'
 Vue.use(VueRouter)
 const routes = [
   {
@@ -27,6 +32,34 @@ const routes = [
         // 发布文章
         path: '/publish',
         component: Publish
+      },
+      {
+        path: '/publish/:articleId',
+        component: Publish
+      },
+      // 评论组件
+      {
+        path: '/comment',
+        component: Comment
+      },
+      // 修改评论
+      {
+        path: '/comment/:articleId',
+        component: CommentList,
+        props: true
+
+      },
+      {
+        path: '/media',
+        component: Media
+      },
+      {
+        path: '/account',
+        component: Account
+      },
+      {
+        path: '/echarts',
+        component: Echarts
       }
     ]
   },
@@ -48,7 +81,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   // 开启顶部导航进度条特效
   NProgress.start()
-  console.log('所有页面访问都经过这里')
+  // console.log('所有页面访问都经过这里')
   // 获取用户 token 判断是否有 有就通过 没有就跳转登录页
 
   // 如果访问的页面是登录页，则直接放行
